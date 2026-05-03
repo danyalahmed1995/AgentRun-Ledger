@@ -113,6 +113,7 @@ export type FileChange = {
   path: string;
   status: FileChangeStatus;
   previousPath?: string;
+  source?: 'head' | 'untracked';
 };
 
 export type SessionDetail = Session & {

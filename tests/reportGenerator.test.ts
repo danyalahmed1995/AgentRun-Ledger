@@ -95,6 +95,7 @@ describe('report generator', () => {
 
   it('includes changed files, notes, review findings, and final diff', () => {
     const markdown = generateReportMarkdown(detail());
+    expect(markdown).toContain('- File tracking: compared to HEAD; untracked files are included.');
     expect(markdown).toContain('🟢 index.js (modified)');
     expect(markdown).toContain('human note');
     expect(markdown).toContain('Failed commands exist');
@@ -125,9 +126,21 @@ describe('report generator', () => {
       after_status: '?? untracked.ts',
       after_diff_stat: 'A\tnew-file.ts\nD\told-file.js\nR100\tsrc/old.ts\tsrc/new.ts'
     }));
+    expect(markdown).toContain('### Added / Untracked');
+    expect(markdown).toContain('### Deleted');
+    expect(markdown).toContain('### Renamed');
     expect(markdown).toContain('🟡 new-file.ts (added)');
     expect(markdown).toContain('🔴 old-file.js (deleted)');
     expect(markdown).toContain('🔵 src/old.ts -> src/new.ts (renamed)');
-    expect(markdown).toContain('🟡 untracked.ts (added)');
+    expect(markdown).toContain('🟡 untracked.ts (untracked)');
+  });
+
+  it('warns when many untracked files suggest a missing baseline commit', () => {
+    const statusShort = Array.from({ length: 11 }, (_, index) => `?? file-${index}.ts`).join('\n');
+    const markdown = generateReportMarkdown(detail({
+      after_status: statusShort,
+      after_diff_stat: ''
+    }));
+    expect(markdown).toContain('Many untracked files detected. Commit your project baseline to make future sessions cleaner.');
   });
 });

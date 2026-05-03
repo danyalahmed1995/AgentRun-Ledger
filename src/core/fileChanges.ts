@@ -1,5 +1,7 @@
 import type { FileChange, FileChangeStatus } from './types.js';
 
+export const MANY_UNTRACKED_FILES_THRESHOLD = 10;
+
 export function parseFileChanges(nameStatus: string, statusShort = ''): FileChange[] {
   const changes = new Map<string, FileChange>();
 
@@ -20,6 +22,23 @@ export function formatFileChangePath(change: FileChange): string {
   return change.previousPath ? `${change.previousPath} -> ${change.path}` : change.path;
 }
 
+export function hasManyUntrackedFiles(changes: FileChange[]): boolean {
+  return countUntrackedFiles(changes) > MANY_UNTRACKED_FILES_THRESHOLD;
+}
+
+export function countUntrackedFiles(changes: FileChange[]): number {
+  return changes.filter((change) => change.source === 'untracked').length;
+}
+
+export function groupFileChanges(changes: FileChange[]): Array<{ title: string; changes: FileChange[] }> {
+  return [
+    { title: 'Modified', changes: changes.filter((change) => change.status === 'modified') },
+    { title: 'Added / Untracked', changes: changes.filter((change) => change.status === 'added') },
+    { title: 'Deleted', changes: changes.filter((change) => change.status === 'deleted') },
+    { title: 'Renamed', changes: changes.filter((change) => change.status === 'renamed' || change.status === 'copied') }
+  ].filter((group) => group.changes.length > 0);
+}
+
 function parseNameStatusLine(line: string): FileChange | null {
   const trimmed = line.trim();
   if (!trimmed) return null;
@@ -31,18 +50,19 @@ function parseNameStatusLine(line: string): FileChange | null {
     return {
       previousPath: parts[1],
       path: parts[2],
-      status: code === 'R' ? 'renamed' : 'copied'
+      status: code === 'R' ? 'renamed' : 'copied',
+      source: 'head'
     };
   }
 
   const path = parts[1];
   const status = mapGitStatus(code);
-  return path && status ? { path, status } : null;
+  return path && status ? { path, status, source: 'head' } : null;
 }
 
 function parseStatusShortLine(line: string): FileChange | null {
   if (!line.trim()) return null;
-  if (line.startsWith('?? ')) return { path: line.slice(3).trim(), status: 'added' };
+  if (line.startsWith('?? ')) return { path: line.slice(3).trim(), status: 'added', source: 'untracked' };
 
   const statusCode = line.slice(0, 2);
   const pathText = line.slice(3).trim();
@@ -53,7 +73,8 @@ function parseStatusShortLine(line: string): FileChange | null {
     return {
       previousPath: renameMatch[1],
       path: renameMatch[2],
-      status: statusCode.includes('R') ? 'renamed' : 'copied'
+      status: statusCode.includes('R') ? 'renamed' : 'copied',
+      source: 'head'
     };
   }
 
@@ -69,7 +90,7 @@ function parseStatusShortLine(line: string): FileChange | null {
             ? 'modified'
             : null;
 
-  return status ? { path: pathText, status } : null;
+  return status ? { path: pathText, status, source: 'head' } : null;
 }
 
 function mapGitStatus(code: string): FileChangeStatus | null {

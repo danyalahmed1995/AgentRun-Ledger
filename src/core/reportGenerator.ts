@@ -3,7 +3,7 @@ import path from 'node:path';
 import { getReportPath } from './paths.js';
 import { generateReviewFindings } from './reviewHeuristics.js';
 import { captureSnapshot, getSessionDetail } from './sessionService.js';
-import { formatFileChangePath, parseFileChanges } from './fileChanges.js';
+import { formatFileChangePath, groupFileChanges, hasManyUntrackedFiles, parseFileChanges } from './fileChanges.js';
 import { assessSession, hasValidationCommand } from './sessionAssessment.js';
 import { formatDuration } from './time.js';
 import type { CommandRecord, SessionDetail } from './types.js';
@@ -60,9 +60,11 @@ export function generateReportMarkdown(detail: SessionDetail): string {
     '## Summary',
     '',
     `- Changed files: ${changedFiles.length}`,
+    '- File tracking: compared to HEAD; untracked files are included.',
     `- Commands logged: ${detail.commands.length}`,
     `- Passed commands: ${passed.length}`,
     `- Failed commands: ${failed.length}`,
+    hasManyUntrackedFiles(fileChanges) ? '- Many untracked files detected. Commit your project baseline to make future sessions cleaner.' : '',
     rawDiff.trim() ? '' : '- No tracked changes were found in the final diff.',
     assessment.hasValidation ? '' : '- Strong warning: no validation command was logged for this session.',
     '',
@@ -72,7 +74,7 @@ export function generateReportMarkdown(detail: SessionDetail): string {
     '',
     '## Files changed',
     '',
-    fileChanges.length ? fileChanges.map(formatFileChangeForReport).join('\n') : '_No file changes detected._',
+    fileChanges.length ? formatFileChangeGroupsForReport(fileChanges) : '_No file changes detected._',
     '',
     '## Command timeline',
     '',
@@ -167,7 +169,14 @@ function formatFileChangeForReport(change: ReturnType<typeof parseFileChanges>[n
       : change.status === 'deleted'
         ? '🔴'
         : '🔵';
-  return `- ${icon} ${formatFileChangePath(change)} (${change.status})`;
+  const status = change.source === 'untracked' ? 'untracked' : change.status;
+  return `- ${icon} ${formatFileChangePath(change)} (${status})`;
+}
+
+function formatFileChangeGroupsForReport(changes: ReturnType<typeof parseFileChanges>): string {
+  return groupFileChanges(changes)
+    .map((group) => [`### ${group.title}`, '', group.changes.map(formatFileChangeForReport).join('\n')].join('\n'))
+    .join('\n\n');
 }
 
 function fenced(text: string): string {
