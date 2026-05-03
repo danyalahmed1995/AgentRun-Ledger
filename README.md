@@ -1,93 +1,93 @@
-# AgentRun Ledger
+# 🚀 AgentRun Ledger
 
-Local session receipts for AI coding agents.
+![Node](https://img.shields.io/badge/node-%3E%3D24-green)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Status](https://img.shields.io/badge/status-active-success)
+![Local First](https://img.shields.io/badge/local--first-yes-orange)
+![AI Ready](https://img.shields.io/badge/AI--agent-ready-purple)
 
-AgentRun Ledger is a local-first CLI and lightweight dashboard that records agent behavior, validation, and results: Git snapshots, touched files, commands, pass/fail outcomes, human notes, and a Markdown review report.
+> 🧾 Local session receipts for AI coding agents
 
-## Why This Exists
+---
 
-Long AI-assisted coding sessions can be hard to review after the fact. AgentRun Ledger gives the human reviewer a practical receipt: what the agent set out to do, what files changed, which validation commands ran, which commands failed, and what deterministic review risks deserve attention.
+## 🧠 What is AgentRun Ledger?
 
-It is intentionally small. There are no accounts, cloud sync, browser recording, or paid API requirements.
+AgentRun Ledger is a **local-first CLI + dashboard** that records what your AI agent actually did during a session.
 
-## Demo Flow
+It captures:
+
+* 📂 Files changed (added / modified / deleted)
+* ⚙️ Commands executed (with pass/fail)
+* 📝 Human notes
+* 📊 Session scoring & risks
+* 📄 Auto-generated Markdown reports
+
+Think of it as:
+
+> 🔍 **Git + Logs + AI audit trail — all in one place**
+
+---
+
+## 🎯 How is this Helpful ?
+
+After a long session, you usually have:
+
+* No clear audit trail
+* No idea what failed silently
+* No structured way to review
+
+AgentRun Ledger fixes that by generating a **deterministic, reviewable session report**.
+
+---
+
+## ⚡ Demo Flow
 
 ```bash
 npm install
 npm run build
+
 npm run dev -- init
 npm run dev -- start "demo agent session"
+
 npm run dev -- note "Testing AgentRun Ledger."
 npm run dev -- run "node -e \"console.log('hello')\""
+
 npm run dev -- report
-npm run dev -- status
 npm run dev -- dashboard
 ```
 
-Open the dashboard at [http://127.0.0.1:3765](http://127.0.0.1:3765).
+Open dashboard:
+👉 http://127.0.0.1:3765
 
-## Installation
+---
 
-For local development:
+## 🖥️ Dashboard Preview
 
-```bash
-npm install
-npm run build
-```
-
-For local linking:
-
-```bash
-npm link
-agentrun init
-```
-
-On Windows PowerShell, if script execution blocks `npm`, use `npm.cmd`:
-
-```bash
-npm.cmd install
-npm.cmd test
-```
-
-## CLI Commands
-
-```bash
-agentrun init
-agentrun start "task name"
-agentrun snapshot before
-agentrun snapshot after
-agentrun run "npm test"
-agentrun note "Codex changed retry logic and added tests."
-agentrun status
-agentrun list
-agentrun report
-agentrun dashboard --port 3765
-```
-
-During development, replace `agentrun` with:
-
-```bash
-npm run dev -- <command>
-```
-
-## Dashboard
-
-The dashboard shows:
-
-- Session list with status and command counts
-- Selected session metadata
-- Changed files from the latest diff stat
-- Command timeline with pass/fail badges and captured output
-- Notes
-- Report preview and report generation
-
-Screenshot placeholder:
+📸 *Add screenshot here*
 
 ```txt
-[Dashboard screenshot goes here]
+[ Dashboard Screenshot ]
 ```
 
-## Example Report Preview
+What you’ll see:
+
+* Session timeline
+* File changes with status badges
+* Command execution logs
+* Notes
+* Live report preview
+
+---
+
+## 📊 Example Report
+
+📸 *Add report screenshot here*
+
+```txt
+[ Report Screenshot ]
+```
+
+Or raw Markdown output:
 
 ```md
 # AgentRun Report: demo agent session
@@ -101,46 +101,130 @@ Screenshot placeholder:
 
 ## Review risks
 
-- **DANGER: Failed commands exist** - 1 logged command failed. Review the command timeline before merging.
+- **DANGER: Failed commands exist**
 ```
 
-## Development
+---
+
+## 🛠️ Installation
+
+### Local development
 
 ```bash
-npm run dev -- init
-npm run dev -- start "work on feature"
-npm run dev -- run "npm test"
-npm run dev -- report
-```
-
-Useful scripts:
-
-```bash
-npm test
-npm run test:agent
+npm install
 npm run build
-npm run dashboard
 ```
 
-## Testing
-
-The test suite uses temporary Git repositories and exercises the DB layer, Git utilities, command runner, session service, report generator, review heuristics, and CLI.
+### Global CLI (recommended)
 
 ```bash
-npm test
+npm link
 ```
 
-## Notes And Limitations
+Then use anywhere:
 
-- Persistence uses Node's built-in `node:sqlite`, so Node 24+ is recommended.
-- Node currently prints an experimental warning for `node:sqlite`.
-- Reports use deterministic heuristics only; no LLM or paid API is required.
-- The command runner logs command output, but it is not a full terminal recorder.
+```bash
+agentrun init
+agentrun start "my session"
+```
 
-## Roadmap
+---
 
-- Optional report summary provider behind an interface
-- Better dashboard filtering and search
-- Session close command
-- Export report bundles
-- Optional screenshot support for dashboard docs
+## ⚙️ CLI Commands
+
+```bash
+agentrun init
+agentrun start "task name"
+agentrun snapshot before
+agentrun snapshot after
+agentrun run "npm test"
+agentrun note "Agent updated retry logic"
+agentrun status
+agentrun list
+agentrun report
+agentrun dashboard --port 3765
+```
+
+---
+
+## 🤖 Works With Any AI Agent
+
+AgentRun Ledger is **agent-agnostic**.
+
+Use it with:
+
+* Codex
+* Gemini CLI
+* Local LLMs
+* Any script or automation
+
+Just wrap actions like:
+
+```bash
+agentrun run "your command"
+```
+
+---
+
+## 🧪 Development Workflow Example
+
+```bash
+agentrun start "implement feature X"
+
+agentrun run "npm install"
+agentrun run "npm run build"
+
+agentrun note "Added API layer and validation"
+
+agentrun report
+```
+
+---
+
+## 🧩 How It Works
+
+* Uses **Git diff vs HEAD** to track file changes
+* Stores session data in `.agentrun/agentrun.db`
+* Generates deterministic reports (no AI required)
+* Dashboard reads local DB only
+
+No cloud. No API keys. No tracking.
+
+---
+
+## ⚠️ Notes & Limitations
+
+* Requires Node 24+ (uses `node:sqlite`)
+* SQLite warning is expected (experimental feature)
+* No full terminal recording (command-level only)
+* Reports are heuristic-based (not AI-generated)
+
+---
+
+## 🗺️ Roadmap
+
+* [ ] Session types (planning / dev / test)
+* [ ] Validation-aware scoring
+* [ ] Report export bundles
+* [ ] Dashboard filters & search
+* [ ] Optional AI-powered summaries
+* [ ] Screenshot embedding support
+
+---
+
+## 📸 Screenshots
+
+📌 Add these later:
+
+```txt
+[ Dashboard UI ]
+[ File change tracking ]
+[ Command timeline ]
+[ Report output ]
+```
+
+---
+
+## 📄 License
+
+MIT
