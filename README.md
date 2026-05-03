@@ -63,11 +63,8 @@ Open dashboard:
 
 ## 🖥️ Dashboard Preview
 
-📸 *Add screenshot here*
+![Preview](./assets/preview.png)
 
-```txt
-[ Dashboard Screenshot ]
-```
 
 What you’ll see:
 
@@ -81,13 +78,7 @@ What you’ll see:
 
 ## 📊 Example Report
 
-📸 *Add report screenshot here*
-
-```txt
-[ Report Screenshot ]
-```
-
-Or raw Markdown output:
+![Preview](./assets/report.png)
 
 ```md
 # AgentRun Report: demo agent session
@@ -212,16 +203,9 @@ No cloud. No API keys. No tracking.
 
 ---
 
-## 📸 Screenshots
+## 📸 Demo
 
-📌 Add these later:
-
-```txt
-[ Dashboard UI ]
-[ File change tracking ]
-[ Command timeline ]
-[ Report output ]
-```
+![Example](./assets/demo.gif)
 
 ---
 
