@@ -315,6 +315,9 @@ Before any task:
 3. Follow it strictly
 4. Use AgentRun Ledger for all actions
 
+
+![Agent Recipes Preview](./assets/recipe-commands.png)
+
 ---
 
 ## 📄 License
