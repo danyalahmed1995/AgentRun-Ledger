@@ -80,6 +80,14 @@ What you’ll see:
 
 ![Preview](./assets/report.png)
 
+---
+
+## 📸 Demo
+
+![Example](./assets/demo.gif)
+
+---
+
 ```md
 # AgentRun Report: demo agent session
 
@@ -192,20 +200,120 @@ No cloud. No API keys. No tracking.
 
 ---
 
-## 🗺️ Roadmap
+## 🗺️ Using Agent Recipes
 
-* [ ] Session types (planning / dev / test)
-* [ ] Validation-aware scoring
-* [ ] Report export bundles
-* [ ] Dashboard filters & search
-* [ ] Optional AI-powered summaries
-* [ ] Screenshot embedding support
+AgentRun Ledger includes pre-built **agent recipes** to standardize workflows.
+
+These are located in:
+
+```
+agent-recipes/
+```
 
 ---
 
-## 📸 Demo
+### 🎯 How to Use with AI Agents (Codex / Gemini)
 
-![Example](./assets/demo.gif)
+When starting a task, explicitly instruct the agent to:
+
+1. **Read the recipe file**
+2. **Follow it step-by-step**
+3. **Execute all commands via `agentrun`**
+
+---
+
+### 🧠 Example Prompt (Planning Task)
+
+```text
+Before doing anything:
+
+1. Open and read:
+   agent-recipes/planning-session.md
+
+2. Follow it strictly.
+
+3. Do not skip steps.
+
+4. Use agentrun for:
+   - starting session
+   - logging commands
+   - adding notes
+   - generating report
+
+Task:
+Plan a RAG Regression Lab project.
+```
+
+---
+
+### ⚙️ Example Prompt (Feature Work)
+
+```text
+Before starting:
+
+1. Read:
+   agent-recipes/feature-implementation.md
+
+2. Follow all steps exactly.
+
+3. All commands must go through:
+   agentrun run "<command>"
+
+Task:
+Implement API layer for RAG system.
+```
+
+---
+
+### 🔁 Recovery After Reset
+
+```text
+You were previously working on this project.
+
+Before continuing:
+
+1. Read:
+   agent-recipes/recovery-after-reset.md
+
+2. Follow it strictly.
+
+3. Resume from last AgentRun report.
+```
+
+---
+
+## 📌 Important Rules
+
+* Always reference recipe **by path**
+* Always say **"read this file first"**
+* Always enforce **step-by-step execution**
+
+If you don’t do this, the agent will ignore your system.
+
+---
+
+# Agent Recipes
+
+This folder contains standardized workflows for AI agents.
+
+## Available Recipes
+
+* planning-session.md → planning only
+* feature-implementation.md → feature development
+* bug-fix-session.md → debugging
+* refactor-session.md → safe refactoring
+* test-and-validation.md → testing
+* documentation-update.md → docs work
+* recovery-after-reset.md → resume sessions
+
+## Usage Rule
+
+Before any task:
+
+1. Select the appropriate recipe
+2. Read it fully
+3. Follow it strictly
+4. Use AgentRun Ledger for all actions
 
 ---
 
